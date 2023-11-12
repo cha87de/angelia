@@ -1,0 +1,51 @@
+---
+jwt_secret: a_very_important_secret
+
+log:
+  level: debug
+
+totp:
+  issuer: authelia.com
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: www.example.com
+      policy: one_factor
+      resources:
+        - "^/api.*"
+    - domain: www.example.com
+      policy: bypass
+      resources:
+        - "^/.*"
+    - domain: traefik.example.com
+      policy: two_factor
+
+
+session:
+  secret: unsecure_session_secret
+  name: authelia_session
+  domain: example.com
+  same_site: lax
+  expiration: 1h
+  inactivity: 5m
+  remember_me_duration: 1M
+
+regulation:
+  max_retries: 3
+  find_time: 120
+  ban_time: 300
+
+storage:
+  encryption_key: you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /config/notification.txt
+...

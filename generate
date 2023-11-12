@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker run --rm \
+  --add-host=auth.example.com:172.18.0.1 \
+  -e "JAVA_OPTS=-Dio.swagger.parser.util.RemoteUrl.trustAll=true -Dio.swagger.v3.parser.util.RemoteUrl.trustAll=true" \
+  -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+  -i https://auth.example.com/api/openapi.yml \
+  -g typescript-angular \
+  -o /local/app/angelia/src/app/

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+docker run --rm \
+  --network dev_net \
+  --name app \
+  --label 'traefik.enable=true' \
+  --label 'traefik.http.routers.app.rule=Host(`www.example.com`) && PathPrefix(`/`)' \
+  --label 'traefik.http.routers.app.entrypoints=https' \
+  --label 'traefik.http.routers.app.tls=true' \
+  --label 'traefik.http.routers.app.tls.options=default' \
+  --label 'traefik.http.routers.app.middlewares=authelia' \
+  --volume "$(pwd)/app/angelia:/workdir" \
+  --workdir /workdir \
+  --expose 80 \
+  registry.alb-tec.de/alb-tec/builder/angular:latest \
+  ng serve --host 0.0.0.0 --port 80 --disable-host-check
